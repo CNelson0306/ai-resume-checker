@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+AI - Powered Resume Analyser Application
 
-## Getting Started
+An AI-driven web application that analyzes resumes against job descriptions, identifies missing keywords, provides targeted feedback, and can generate rewritten resume content using advanced AI models.
 
-First, run the development server:
+The platform allows users to securely authenticate via AWS Cognito, upload resumes for text extraction, and save analysis results using DynamoDB.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Features:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    Secure Authentication
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    Cognito Hosted UI login (Authorization Code Flow)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    Tokens exchanged in a secure callback route
 
-## Learn More
+    Protected dashboard & API routes
 
-To learn more about Next.js, take a look at the following resources:
+    Logout redirects through Cognito for full session termination
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Resume Upload & Text Extraction:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    Upload PDF or text resumes
 
-## Deploy on Vercel
+    Client extracts raw text from file
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    Displays and stores extracted content
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+AI-Powered Resume Analysis
+
+    Match score between resume & job description
+
+    Missing keyword detection
+
+    High-quality AI-generated feedback
+
+    Optional AI-powered rewritten resume section
+
+Save & Manage Analyses
+
+    Save full analyses (text, score, feedback, rewritten output) to DynamoDB
+
+    Expandable UI to read each saved analysis
+
+    Delete records directly in the interface
+
+Responsive, Mobile-Friendly UI
+
+    Tech theme
+
+    Global CSS variables
+
+    Custom card layout and spacing system
+
+Tech Stack
+
+Frontend
+
+    Next.js 14 (App Router)
+
+    React (use client)
+
+    Custom global CSS (no Tailwind)
+
+    File upload + text extraction
+
+    Responsive mobile-first layout
+
+AI
+
+Integrated with OpenAI API
+
+AI used for:
+
+Resume matching
+
+Keyword extraction
+
+Feedback generation
+
+Resume rewriting
+
+Authentication
+
+AWS Cognito Hosted UI
+
+OAuth2 Authorization Code Flow
+
+Tokens stored client-side
+
+Protected client & server routes
+
+Backend (Serverless via Next.js APIs)
+
+    /api/analyze → AI resume analyzer
+
+    /api/rewrite → AI rewrite engine
+
+    /api/save-analysis → Save to DynamoDB
+
+    /api/get-analyses → Fetch user analyses
+
+    /api/delete → Delete a saved analysis
+
+Database
+
+    AWS DynamoDB
+
+    PK = user email (or sub)
+
+    SK = analysis ID (UUID)
+
+    Stores:
+
+    Resume text
+
+    Job description
+
+    Match score
+
+    Missing keywords
+
+    AI feedback
+
+    Rewritten resume
+
+    Timestamp
