@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "AI Resume Analyser",
   description: "AI powered resume analyser application",
   icons: {
-    icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
+    icon: "/favicon.png",
   },
 };
 
