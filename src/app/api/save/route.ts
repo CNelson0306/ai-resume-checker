@@ -4,11 +4,11 @@ import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import { importJWK, jwtVerify } from "jose";
 
-const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+const client = new DynamoDBClient({ region: process.env.NEXT_REGION });
 const docClient = DynamoDBDocumentClient.from(client);
 
 // Fetch Cognito JWKS for verification
-const JWKS_URL = `https://cognito-idp.${process.env.AWS_REGION}.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`;
+const JWKS_URL = `https://cognito-idp.${process.env.NEXT_REGION}.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`;
 
 export async function POST(req: Request) {
   try {

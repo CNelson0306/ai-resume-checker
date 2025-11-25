@@ -4,7 +4,7 @@ import { DeleteCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken";
 
 const client = new DynamoDBClient({
-  region: process.env.AWS_REGION,
+  region: process.env.NEXT_REGION,
 });
 
 const docClient = DynamoDBDocumentClient.from(client);

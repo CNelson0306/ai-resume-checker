@@ -25,6 +25,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@netlify/next": "^1.4.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

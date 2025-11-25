@@ -2,7 +2,7 @@ import { CognitoJwtVerifier } from "aws-jwt-verify";
 
 // 🔹 Create a verifier for ID tokens
 export const verifier = CognitoJwtVerifier.create({
-  userPoolId: process.env.COGNITO_USER_POOL_ID!,  // e.g., eu-west-2_xxxxx
+  userPoolId: process.env.COGNITO_USER_POOL_ID!,  
   tokenUse: "id",                                   // verify ID token
   clientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!,
 });
