@@ -13,19 +13,8 @@ export default function AmplifyProvider({
 }) {
   useEffect(() => {
     if (!configured) {
-      // Check required env vars at runtime
-      const { region, userPoolId, userPoolWebClientId } = awsConfig.Auth;
-
-      if (!region || !userPoolId || !userPoolWebClientId) {
-        console.error("Missing required Amplify environment variables:", {
-          region,
-          userPoolId,
-          userPoolWebClientId,
-        });
-      } else {
-        Amplify.configure(awsConfig);
-        configured = true;
-      }
+      Amplify.configure(awsConfig as any);
+      configured = true;
     }
   }, []);
 
