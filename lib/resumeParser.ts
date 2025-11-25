@@ -6,9 +6,10 @@ export async function parseResume(buffer: Buffer, mimeType: string): Promise<str
   try {
     if (mimeType.includes("pdf")) {
       // Dynamically import pdf-parse to avoid Next.js bundler issues
-      const pdfParse = (await import("pdf-parse")).default || (await import("pdf-parse"));
-      const data = await (pdfParse as any)(buffer);
+      const pdfParse = (await import("pdf-parse")) as any;
+      const data = await pdfParse(buffer);
       return data.text;
+
     }
 
     if (mimeType.includes("word") || mimeType.includes("docx")) {
