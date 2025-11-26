@@ -1,52 +1,66 @@
 import { NextResponse } from "next/server";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken"; // helper from before
+import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken";
 
-const client = new DynamoDBClient({
-  region: process.env.NEXT_REGION,
-});
+// Validate required environment variables
+const { NEXT_REGION, DYNAMO_TABLE, COGNITO_USER_POOL_ID } = process.env;
+if (!NEXT_REGION || !DYNAMO_TABLE || !COGNITO_USER_POOL_ID) {
+console.error("Missing required environment variables!");
+}
 
+const client = new DynamoDBClient({ region: NEXT_REGION });
 const docClient = DynamoDBDocumentClient.from(client);
 
 export async function GET(req: Request) {
-  try {
-    // 🔹 Check for and verify Cognito JWT
-    const authHeader = req.headers.get("authorization");
-    if (!authHeader) {
-      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-    }
+try {
+// 🔹 Authorization check
+const authHeader = req.headers.get("authorization");
+if (!authHeader) {
+console.warn("Authorization header missing");
+return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+}
 
-    const token = authHeader.split(" ")[1];
-    const user = await verifyCognitoToken(token);
 
-    if (!user || !user.sub) {
-      return NextResponse.json({ ok: false, error: "Invalid token" }, { status: 401 });
-    }
+const token = authHeader.split(" ")[1];  
+let user;  
+try {  
+  user = await verifyCognitoToken(token);  
+} catch (err) {  
+  console.error("Cognito token verification failed:", err);  
+  return NextResponse.json({ ok: false, error: "Invalid token" }, { status: 401 });  
+}  
 
-    const userId = user.sub;
+if (!user || !user.sub) {  
+  return NextResponse.json({ ok: false, error: "Invalid token payload" }, { status: 401 });  
+}  
 
-    // 🔹 Query user’s analyses from DynamoDB
-    const command = new QueryCommand({
-      TableName: process.env.DYNAMO_TABLE!,
-      KeyConditionExpression: "userId = :u",
-      ExpressionAttributeValues: {
-        ":u": userId,
-      },
-    });
+const userId = user.sub;  
 
-    const response = await docClient.send(command);
-    const items = response.Items || [];
+// 🔹 DynamoDB query  
+let response;  
+try {  
+  const command = new QueryCommand({  
+    TableName: DYNAMO_TABLE,  
+    KeyConditionExpression: "userId = :u",  
+    ExpressionAttributeValues: { ":u": userId },  
+  });  
 
-    // 🔹 Sort by most recent
-    items.sort(
-      (a: any, b: any) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
+  response = await docClient.send(command);  
+} catch (dbError) {  
+  console.error("DynamoDB query failed:", dbError);  
+  return NextResponse.json({ ok: false, error: "Failed to fetch analyses" }, { status: 500 });  
+}  
 
-    return NextResponse.json({ ok: true, items });
-  } catch (error: any) {
-    console.error("Error fetching analyses:", error);
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
-  }
+const items = (response.Items || []).sort(  
+  (a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()  
+);  
+
+return NextResponse.json({ ok: true, items });  
+
+
+} catch (error: any) {
+console.error("Unexpected error in GET /get-analyses:", error);
+return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+}
 }
