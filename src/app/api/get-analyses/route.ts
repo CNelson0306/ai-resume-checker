@@ -3,6 +3,13 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken";
 
+console.log("ENV:", {
+  DYNAMO_TABLE: process.env.DYNAMO_TABLE,
+  REGION: process.env.NEXT_REGION,
+  COGNITO_POOL: process.env.COGNITO_USER_POOL_ID,
+});
+
+
 // Validate required environment variables
 const { NEXT_REGION, DYNAMO_TABLE, COGNITO_USER_POOL_ID } = process.env;
 if (!NEXT_REGION || !DYNAMO_TABLE || !COGNITO_USER_POOL_ID) {
