@@ -8,7 +8,6 @@ console.log("ENV:", {
   REGION: process.env.NEXT_REGION,
   COGNITO_POOL: process.env.COGNITO_USER_POOL_ID
 });
-console.log("Authorization header:", req.headers.get("authorization"));
 
 
 // Validate required environment variables
