@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 import { saveAnalysis } from "../../../../lib/dynamo";
-import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken"; // helper you’ll create
+import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken";
 
 export async function POST(req: Request) {
   try {
-    // ✅ Check for Cognito token
     const authHeader = req.headers.get("authorization");
     if (!authHeader) {
       return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
@@ -17,11 +16,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Invalid token" }, { status: 401 });
     }
 
-    // ✅ Parse and attach the userId
+    // Parse incoming data
     const data = await req.json();
-    data.userId = user.sub;
 
-    // ✅ Save analysis with user association
+    // Attach required fields
+    data.userId = user.sub;
+    data.timestamp = Date.now(); // ← REQUIRED FIX (consistently named)
+
     const saved = await saveAnalysis(data);
 
     return NextResponse.json({ ok: true, saved });

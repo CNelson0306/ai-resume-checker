@@ -59,10 +59,12 @@ export async function GET(req: Request) {
       );
     }
 
-    const items = (response.Items || []).sort(
-      (a: any, b: any) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    );
+    const items = (response.Items || []).sort((a: any, b: any) => {
+  const ta = a.timestamp || 0;
+  const tb = b.timestamp || 0;
+  return tb - ta;
+});
+
 
     return NextResponse.json({ ok: true, items });
   } catch (error: any) {
