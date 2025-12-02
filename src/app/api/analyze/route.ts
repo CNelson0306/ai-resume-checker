@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
+console.log("OPENAI KEY ON SERVER:", process.env.OPENAI_API_KEY ? "YES" : "NO");
+
+
 const client = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 })
