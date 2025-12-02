@@ -45,7 +45,7 @@ ${jobDescription}
 `;
 
         const completion = await client.chat.completions.create({
-            model: "gpt-4-turbo",
+            model: "gpt-4.1-mini",
             messages: [{ role: "user", content: prompt }],
             response_format: { type: "json_object"},
         })
