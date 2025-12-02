@@ -1,5 +1,12 @@
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 
+//Remove this after successful deployment
+console.log("Verifier config:", {
+  userPoolId: process.env.COGNITO_USER_POOL_ID,
+  clientId: process.env.COGNITO_CLIENT_ID
+});
+
+
 // 🔹 Create a verifier for ID tokens
 export const verifier = CognitoJwtVerifier.create({
   userPoolId: process.env.COGNITO_USER_POOL_ID!,  
