@@ -4,6 +4,7 @@ import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken";
 
 
+console.log("ENV CHECK:", process.env.NEXT_REGION, process.env.DYNAMO_TABLE);
 
 
 // Validate required environment variables

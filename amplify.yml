@@ -1,0 +1,22 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - node_modules/**/*
+
+  environment:
+    OPENAI_API_KEY: ${OPENAI_API_KEY}
+    NEXT_REGION: ${NEXT_REGION}
+    DYNAMO_TABLE: ${DYNAMO_TABLE}
+    COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID}
