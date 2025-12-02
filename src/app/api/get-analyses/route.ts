@@ -3,11 +3,7 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { verifyCognitoToken } from "../../../../lib/verifyCognitoToken";
 
-console.log("ENV:", {
-  DYNAMO_TABLE: process.env.DYNAMO_TABLE,
-  REGION: process.env.NEXT_REGION,
-  COGNITO_POOL: process.env.COGNITO_USER_POOL_ID
-});
+
 
 
 // Validate required environment variables
@@ -16,7 +12,10 @@ if (!NEXT_REGION || !DYNAMO_TABLE || !COGNITO_USER_POOL_ID) {
 console.error("Missing required environment variables!");
 }
 
-const client = new DynamoDBClient({ region: NEXT_REGION });
+const client = new DynamoDBClient({ 
+  region: NEXT_REGION,
+  credentials: undefined, 
+});
 const docClient = DynamoDBDocumentClient.from(client);
 
 export async function GET(req: Request) {
