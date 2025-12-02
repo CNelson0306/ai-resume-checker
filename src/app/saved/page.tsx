@@ -12,7 +12,7 @@ export default function SavedAnalysesPage() {
   useEffect(() => {
     async function fetchAnalyses() {
       try {
-        const token = localStorage.getItem("idToken"); // stored after Cognito login
+        const token = localStorage.getItem("accessToken"); // ⬅️ FIXED
         if (!token) {
           setError("You must be logged in to view saved analyses.");
           setLoading(false);
@@ -46,7 +46,7 @@ export default function SavedAnalysesPage() {
     if (!confirm("Are you sure you want to delete this analysis?")) return;
 
     try {
-      const token = localStorage.getItem("idToken");
+      const token = localStorage.getItem("accessToken"); // ⬅️ FIXED
       if (!token) {
         alert("Please log in first.");
         return;
