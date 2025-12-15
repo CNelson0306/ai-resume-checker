@@ -1,23 +1,19 @@
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 
-//Remove this after successful deployment
-console.log("Verifier config:", {
-  userPoolId: process.env.COGNITO_USER_POOL_ID,
-  clientId: process.env.COGNITO_CLIENT_ID
-});
-
-
-// 🔹 Create a verifier for ID tokens
-export const verifier = CognitoJwtVerifier.create({
-  userPoolId: process.env.COGNITO_USER_POOL_ID!,  
-  tokenUse: "id",                                   // verify ID token
-clientId: process.env.COGNITO_CLIENT_ID!,
-});
-
 export async function verifyCognitoToken(token: string) {
+  if (!process.env.COGNITO_USER_POOL_ID || !process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID) {
+    console.error("Missing Cognito env vars at runtime");
+    return null;
+  }
+
+  const verifier = CognitoJwtVerifier.create({
+    userPoolId: process.env.COGNITO_USER_POOL_ID,
+    clientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID,
+    tokenUse: "id",
+  });
+
   try {
-    const payload = await verifier.verify(token); // throws if invalid
-    return payload;
+    return await verifier.verify(token);
   } catch (err) {
     console.error("JWT validation failed:", err);
     return null;

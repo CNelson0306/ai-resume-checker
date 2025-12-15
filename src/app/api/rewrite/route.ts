@@ -1,12 +1,16 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
-const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY!,
-})
+
 
 export async function POST(req: Request) {
     try {
+
+        // ✅ Create client at runtime (not build time)
+        const client = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY!,
+        });
+
         const { resumeText, jobDescription } = await req.json()
 
         if (!resumeText || !jobDescription) {
