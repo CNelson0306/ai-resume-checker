@@ -209,9 +209,10 @@ textarea {
   word-wrap: break-word;
   font-family: "Outfit", monospace;
   font-size: 0.9rem;
-  max-width: 680px;
-  margin: 0.6rem auto 1.2rem auto;
-  line-height: 1.6;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
 }
 
 /* --------------------------- */
